@@ -1,5 +1,8 @@
 # %% 
 
+from asyncio import constants
+
+
 def isSnakeBody(pos, snake):
     """
     I consider that the body is the snake's cells without include the head (1st position of the array)
@@ -49,7 +52,6 @@ def isSnakeGood(board, snake):
     i = 0
 
     while(i+1 < len(snake) and result):
-        print(i)
         # Position out of board
         if snake[i] == -1:
             result = False
@@ -117,7 +119,10 @@ def movePosition(board, snake, pos, movement):
     # The head eat the body 
     if newPosition[0] != -1 and isSnakeBody(newPosition,snake):
         newPosition = [-2]
+        
     # The snake only have head and tail (snake.lenght=2) and the head is moving to the tail position
+    # Notice that guaranteed constraints says 3 ≤ snake.length ≤ 7, but this part is to help us
+    # whem we check the snake's cells by taking pair of cells
     if len(snake) == 2 and (newPosition == snake[-1]):
         newPosition = [-3]
         
@@ -163,21 +168,70 @@ def printBoardWithSnake(board, snake):
                 print("+ ",end="") 
         print()
             
-# To do 
-#   - Calculate the number of available different Paths
-#   - Check inicial inputs values
+def areInputsOnAvailableRange(board, snake, depth):    
+    result = True
+    # Check board constraints
+    if board[0] < 1 or board[0] > 10 or board[1] < 1 or board[1] > 10: 
+        result = False
+        print("ERROR: board dimension not allowed. 1 ≤ board[i] ≤ 10")
+    if len(board) != 2:
+        result = False
+        print("ERROR: board only have 2 values board[0], stands for the number of rows, and board[1], stands to the number of columns.")
+    
+    # Check snake constraints
+    for cell in snake:
+        row = cell[0]
+        colum = cell[1]
+        if len(cell) !=2:
+            result = False
+            print("ERROR: a cell of the only have 2 values snake[0], stands rows position, and snake[1], stands columns position.")
+            break
+       
+        if row < 0 or row >= board[0] or colum < 0 or colum >= board[1]: 
+            result = False
+            print("ERROR: 0 ≤ snake[i][j] < board[j].")
+            break 
+        
+    if len(snake) < 3 or len(snake) > 7:
+        result = False
+        print("ERROR: the snake only can have a number of cells 3 ≤ snake.length ≤ 7.")
+        
+    # Check depth constraints
+    if len(depth) < 1 or len(depth) > 20:
+        result = False
+        print("ERROR: the snake only can have a number of cells 3 ≤ snake.length ≤ 7.")
+    
+    return result
 
     
 board = [4, 3]
 snake = [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]]
 depth = 3
+
+board = [2, 3]
+snake = [[0,2], [0,1], [0,0], [1,0], [1,1], [1,2]]
+depth = 10
+
+board = [10,10]
+snake = [[5,5], [5,4], [4,4], [4,5]]
+depth = 4
+print(isSnakeGood(board,snake))
 print("Initial snake positions: ")
 print(snake)
 print("Initial board: ")
 printBoardWithSnake(board,snake)
 print(numberOfAvailableDifferentPaths(board,snake,depth))
-# print(isSnakeGood(board,goodSnake[:2]))
 # %% 
-aux  = {0:'R', 1:'L', 2:'D', 3:'U'}
-print(aux.get(0))
+board = [2, 3]
+snake = [[0,2], [0,1], [3,4], [1,0], [1,1], [1,2]]
+result = True
+for cell in snake:
+    row = cell[0]
+    colum = cell[1]
+    print("a")
+    if row < 0 or row >= board[0] or colum < 0 or colum >= board[1]: 
+        result = False
+        print("ERROR: 0 ≤ snake[i][j] < board[j].")
+        break
+print(result)
 # %%
