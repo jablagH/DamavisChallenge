@@ -31,7 +31,7 @@ def isOutOfBoard(pos, board):
  
 def isSnakeGood(board, snake):
     """   
-    Check if the snake cells are well builted, the snake has one or more cells such those
+    Check if the snake cells are well constructed, the snake has one or more cells such those
     cells are horizontally or vertically adjacent and are inside the board dimensions.
     
     Args:
@@ -39,8 +39,8 @@ def isSnakeGood(board, snake):
         snake (list.list.integer): snakes cells cordinates
 
     Returns:
-        True : if the snake cells are well builted
-        False: if the snake cells are not well builted
+        True : if the snake cells are well constructed
+        False: if the snake cells are not well constructed
     """
 
     result = True
@@ -148,13 +148,13 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
                 # and add the new position (new head) as first 
                 newSnake = [newPosition, *snake[:-1]]
                 
-                # Lines to print the snake on the board and debug
-                print("----------")
-                numMoveToLetter  = {0:'R', 1:'L', 2:'D', 3:'U'}
-                print("Depth: "+ str(depth))
-                print("Move "+ numMoveToLetter.get(j)+" snake new position: ",end="")
-                print(newSnake)
-                printBoardWithSnake(board,newSnake)
+                # Lines to print the movement ot the snake on the board and debug
+                # print("----------")
+                # numMoveToLetter  = {0:'R', 1:'L', 2:'D', 3:'U'}
+                # print("Depth: "+ str(depth))
+                # print("Move "+ numMoveToLetter.get(j)+" snake new position: ",end="")
+                # print(newSnake)
+                # printBoardWithSnake(board,newSnake)
                 
                 if depth == 1:
                     result += 1
@@ -223,27 +223,59 @@ def areInputsOnAvailableRange(board, snake, depth):
         print("ERROR: the snake only can have a number of cells 3 ≤ snake.length ≤ 7.")
         
     # Check depth constraints
-    if len(depth) < 1 or len(depth) > 20:
+    if depth < 1 or depth > 20:
         result = False
         print("ERROR: the snake only can have a number of cells 3 ≤ snake.length ≤ 7.")
     
     return result
 
+
+tests = [
+    {
+    "board" : [4, 3],
+    "snake" : [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]],
+    "depth" : 3,
+    "result" : 3
+    },
+    {
+    "board" : [2, 3],
+    "snake" : [[0,2], [0,1], [0,0], [1,0], [1,1], [1,2]],
+    "depth" : 3,
+    "result" : 1
     
-board = [4, 3]
-snake = [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]]
-depth = 3
-
-board = [2, 3]
-snake = [[0,2], [0,1], [0,0], [1,0], [1,1], [1,2]]
-depth = 10
-
-board = [10,10]
-snake = [[5,5], [5,4], [4,4], [4,5]]
-depth = 4
-print(isSnakeGood(board,snake))
-print("Initial snake positions: ")
-print(snake)
-print("Initial board: ")
-printBoardWithSnake(board,snake)
-print(numberOfAvailableDifferentPaths(board,snake,depth))
+    },
+    {
+    "board" : [10,10],
+    "snake" : [[5,5], [5,4], [4,4], [4,5]],
+    "depth" : 4,
+    "result" : 81
+    },
+    {
+    "board" : [3, 1],
+    "snake" : [[2, 0], [1, 0], [0, 0]],
+    "depth" : 3,
+    "result" : 0
+    },
+    {
+    "board" : [4, 3],
+    "snake" : [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]],
+    "depth" : 3,
+    "result" : 7
+    }
+]  
+for test in tests:
+    board =  test["board"]
+    snake =  test["snake"] 
+    depth =  test["depth"] 
+    expectedResult = test["result"] 
+    print(f"Initial snake positions: {snake}")
+    if(areInputsOnAvailableRange(board, snake, depth)):
+        if isSnakeGood(board,snake):
+            print("Initial board: ")
+            printBoardWithSnake(board,snake)
+            output = numberOfAvailableDifferentPaths(board,snake,depth)
+            print(f"\nExpected value {expectedResult} \nActual output: {output}")
+        else:
+            print("ERROR: the snake cells are not well constructed")
+    print("===================================================")
+        
