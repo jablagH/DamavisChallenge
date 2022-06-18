@@ -148,7 +148,7 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
                 # and add the new position (new head) as first 
                 newSnake = [newPosition, *snake[:-1]]
                 
-                # Lines to print the movement ot the snake on the board and debug
+                # Lines to print the movement ot the snake on the board and debug, uncomment to see it
                 # print("----------")
                 # numMoveToLetter  = {0:'R', 1:'L', 2:'D', 3:'U'}
                 # print("Depth: "+ str(depth))
@@ -235,7 +235,7 @@ tests = [
     "board" : [4, 3],
     "snake" : [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]],
     "depth" : 3,
-    "result" : 3
+    "result" : 7
     },
     {
     "board" : [2, 3],
@@ -258,9 +258,9 @@ tests = [
     },
     {
     "board" : [4, 3],
-    "snake" : [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]],
+    "snake" : [[5, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]],
     "depth" : 3,
-    "result" : 7
+    "result" : "Error"
     }
 ]  
 for test in tests:
@@ -268,7 +268,7 @@ for test in tests:
     snake =  test["snake"] 
     depth =  test["depth"] 
     expectedResult = test["result"] 
-    print(f"Initial snake positions: {snake}")
+    print(f"Initial snake positions: {snake}\n")
     if(areInputsOnAvailableRange(board, snake, depth)):
         if isSnakeGood(board,snake):
             print("Initial board: ")
