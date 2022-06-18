@@ -1,8 +1,3 @@
-# %% 
-
-from asyncio import constants
-
-
 def isSnakeBody(pos, snake):
     """
     I consider that the body is the snake's cells without include the head (1st position of the array)
@@ -130,6 +125,17 @@ def movePosition(board, snake, pos, movement):
 
 
 def numberOfAvailableDifferentPaths(board, snake, depth):
+    """
+    Return the number of distinct valid paths of length p that the snake can make
+
+    Args:
+        board (list.integer): board dimensions
+        snake (list.list.integer): snakes cells cordinates
+        depth (integer): paths depth
+
+    Returns:
+        integer: number of distinct valid paths of length p that the snake can make
+    """
     result = 0
     if depth != 0:
 
@@ -159,6 +165,14 @@ def numberOfAvailableDifferentPaths(board, snake, depth):
 
 
 def printBoardWithSnake(board, snake):
+    """
+    Print the board with empty coordinades equal to + and
+    a number that is the position of the snake's cells in the board
+
+    Args:
+        board (list.integer): board dimensions
+        snake (list.list.integer): snakes cells cordinates
+    """
     for i in range(board[0]):
         for j in range(board[1]):
             if [i,j] in snake:
@@ -168,7 +182,19 @@ def printBoardWithSnake(board, snake):
                 print("+ ",end="") 
         print()
             
-def areInputsOnAvailableRange(board, snake, depth):    
+def areInputsOnAvailableRange(board, snake, depth):
+    """
+    Function to find out whether the guaranteed constraints for the inputs are respected    
+    Args:
+        board (list.integer): board dimensions
+        snake (list.list.integer): snakes cells cordinates
+        depth (integer): paths depth
+     
+    Returns:
+        True : if respect the constraints
+        False: if not respect the constraints
+       
+    """  
     result = True
     # Check board constraints
     if board[0] < 1 or board[0] > 10 or board[1] < 1 or board[1] > 10: 
@@ -221,17 +247,3 @@ print(snake)
 print("Initial board: ")
 printBoardWithSnake(board,snake)
 print(numberOfAvailableDifferentPaths(board,snake,depth))
-# %% 
-board = [2, 3]
-snake = [[0,2], [0,1], [3,4], [1,0], [1,1], [1,2]]
-result = True
-for cell in snake:
-    row = cell[0]
-    colum = cell[1]
-    print("a")
-    if row < 0 or row >= board[0] or colum < 0 or colum >= board[1]: 
-        result = False
-        print("ERROR: 0 ≤ snake[i][j] < board[j].")
-        break
-print(result)
-# %%
