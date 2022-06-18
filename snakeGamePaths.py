@@ -125,21 +125,31 @@ def movePosition(board, snake, pos, movement):
 
 
 def numberOfAvailableDifferentPaths(board, snake, depth):
-    result = 1
+    result = 0
     if depth != 0:
+
         for j in range(4):
             newPosition = movePosition(board,snake,snake[0],j)
             # If there is not errors we move all the snake cells
             if newPosition[0] >= 0 :
-                print("----------")
-                print("Depth: "+ str(depth))
+
                 # Delete last position (tail position now has previous penultim position)
                 # and add the new position (new head) as first 
                 newSnake = [newPosition, *snake[:-1]]
-                print("Move "+ str(j),end="")
+                
+                # Lines to print the snake on the board and debug
+                print("----------")
+                numMoveToLetter  = {0:'R', 1:'L', 2:'D', 3:'U'}
+                print("Depth: "+ str(depth))
+                print("Move "+ numMoveToLetter.get(j)+" snake new position: ",end="")
                 print(newSnake)
                 printBoardWithSnake(board,newSnake)
-                result += numberOfAvailableDifferentPaths(board,newSnake,depth-1)
+                
+                if depth == 1:
+                    result += 1
+                else:
+                    result += numberOfAvailableDifferentPaths(board,newSnake,depth-1)
+
     return result
 
 
@@ -160,27 +170,14 @@ def printBoardWithSnake(board, snake):
     
 board = [4, 3]
 snake = [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]]
-
-goodSnake = list(map(lambda x: [x[1],x[0]] ,snake))
-goodBoard = [3,4]
 depth = 3
-# print("Initial snake positions: ")
-# print(goodSnake)
-# print("Initial board: ")
-# printBoardWithSnake(goodBoard,goodSnake)
-# print(numberOfAvailableDifferentPaths(goodBoard,goodSnake,depth))
 print("Initial snake positions: ")
 print(snake)
 print("Initial board: ")
 printBoardWithSnake(board,snake)
 print(numberOfAvailableDifferentPaths(board,snake,depth))
-
 # print(isSnakeGood(board,goodSnake[:2]))
-
-
 # %% 
-
-snake = [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]]
-print(type(snake))
-
+aux  = {0:'R', 1:'L', 2:'D', 3:'U'}
+print(aux.get(0))
 # %%
