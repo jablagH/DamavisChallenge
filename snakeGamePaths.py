@@ -1,59 +1,74 @@
+
 # I consider that the body is the snake without include the head (1st position of the array)
 # and the tail (last position of the array)
 # Return true is pos is part of the snake body
 def isSnakeBody(pos, snake):
     return pos in snake[1:-1]
 
+# Check that it is not out of board 
+def isOutOfBoard(pos, board):
+    return pos[0] < 0 or pos[1] < 0 or pos[0] >= board[0] or pos[1] >= board[1]
 
-# If we can move the head to the right it returns the new head position
-# If we cannot move the head to the right return empty list
-def moveHeadRight(board, snake):
-    headPosition = snake[0]  
-    moveRow = headPosition[0]
-    moveColum = headPosition[1] + 1
-    newMovement = [moveRow, moveColum]
-    # Check that it is not out of bounds and is not a part of the body
-    if moveColum > (board[1] - 1) or isSnakeBody(newMovement,snake):
-        newMovement = []
-    return newMovement
 
-# If we can move the head to the left it returns the new head position
-# If we cannot move the head to the left return empty list
-def moveHeadLeft(snake):
-    headPosition = snake[0]
-    moveRow = headPosition[0]
-    moveColum = headPosition[1] - 1
-    newMovement = [moveRow, moveColum]
-    # Check that it is not out of bounds and is not a part of the body
-    if moveColum < 0 or isSnakeBody(newMovement,snake):
-        newMovement = []
-        
-    return newMovement
+# Check if the snake is well builted 
+def isSnakeGood(board, snake):
+    result = True
+    i = 0
 
-# If we can move the head down it returns the new head position
-# If we cannot move the head down return empty list
-def moveHeadDown(board,snake):
-    headPosition = snake[0]
-    moveRow = headPosition[0] + 1
-    moveColum = headPosition[1]
-    newMovement = [moveRow, moveColum]
-    # Check that it is not out of bounds and is not a part of the body
-    if moveRow > (board[0] - 1) or isSnakeBody(newMovement,snake):
-        newMovement = []
-    return newMovement
+    while(i+1 < len(snake) and result):
+        print(i)
+        # Position out of board
+        if snake[i] == -1:
+            result = False
+        # Take pair
+        auxSnake = [snake[i], snake[i+1]]
+        havePairNear = False
+        for j in range(4):
+            # Move to all near position 
+            prove = movePosition(board, auxSnake, snake[i], j)
+            # Head is trying to move to the tails position so its near
+            if prove[0] == -3:
+                havePairNear = True
+        if not havePairNear:
+            print(snake[i])
+            result = False
+        i+=1
+    return result
+  
+  
+def movePosition(board, snake, pos, movement):
+    moveRow = -1
+    moveColum = -1
+    # Move rigth
+    if(movement == 0):
+        moveRow = pos[0]
+        moveColum = pos[1] + 1
+    # Move left
+    elif(movement == 1): 
+        moveRow = pos[0]
+        moveColum = pos[1] -1
+    # Move down
+    elif(movement == 2): 
+        moveRow = pos[0] + 1
+        moveColum = pos[1]
+    # Move up
+    elif(movement == 3): 
+        moveRow = pos[0] - 1
+        moveColum = pos[1] 
     
-# If we can move the head up it returns the new head position
-# If we cannot move the head up return empty list
-def moveHeadUp(snake):
-    newMovement = []
-    headPosition = snake[0]
-    moveRow = headPosition[0] - 1
-    moveColum = headPosition[1]
-    newMovement = [moveRow, moveColum]
-    # Check that it is not out of bounds and is not a part of the body
-    if moveRow < 0 or isSnakeBody(newMovement,snake):
-        newMovement = [] 
-    return newMovement
+    newPosition = [moveRow, moveColum]
+
+    if isOutOfBoard(newPosition,board):
+        newPosition = [-1]       
+    # The head eat the body 
+    if newPosition[0] != -1 and isSnakeBody(newPosition,snake):
+        newPosition = [-2]
+    # The snake only have head and tail and the head is moving to the tail position
+    if len(snake) == 2 and (newPosition == snake[-1]):
+        newPosition = [-3]
+        
+    return newPosition
+
 
 def numberOfAvailableDifferentPaths(board, snake, depth):
     return 0
@@ -63,25 +78,17 @@ def moveBody():
     return
 
 # To do 
-#   - Guaranteed that snake[i] and snake[i + 1] are horizontally or vertically adjacent, and that its initial configuration is valid
 #   - Calculate the number of available different Paths
 
+    
 board = [4, 3]
 snake = [[2, 2], [3, 2], [3, 1], [3, 0], [2, 0], [1, 0], [0, 0]]
+goodSnake = list(map(lambda x: [x[1],x[0]] ,snake))
+board = [3,4]
+print(goodSnake[:2])
 depth = 3
+print(isSnakeGood(board,goodSnake[:2]))
 
-print(snake[0])
-print("Right: ", end='')
-print(moveHeadRight(board,snake))
-
-print("Left: ", end='')
-print(moveHeadLeft(snake))
-
-print("Up: ", end='')
-print(moveHeadUp(snake))
-
-print("Down: ", end='')
-print(moveHeadDown(board,snake))
 
     
 
